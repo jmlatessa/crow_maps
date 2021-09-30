@@ -1,0 +1,140 @@
+<html>
+	<head>
+		<title>Crow Family Survey Maps</title>
+		 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css">
+		<style>
+			html, body {
+				height: 100%;
+			}
+			.hidden {
+				display: none;
+			}
+			.svg-container {
+			  display: inline-block;
+			  position: relative;
+			  width: 100%;
+			  padding-bottom: 100%; /* aspect ratio */
+			  vertical-align: top;
+			  overflow: hidden;
+			}
+			.svg-content-responsive {
+			  display: inline-block;
+			  position: absolute;
+			  top: 10px;
+			  left: 0;
+			}
+			
+			svg .rect {
+			  stroke: steelblue;
+			  stroke-width: 100px;
+			}
+
+			svg text {
+  				font: 8px sans-serif;
+  				font-weight: bold;
+  				pointer-events: none;
+  				stroke: white;
+  				stroke-width: .5;
+			}
+			#faculty-table {
+				overflow-y: auto;
+			}
+
+			td {
+				font-size: .8rem
+			}
+			.unselected {
+				background-color: #d3d3d3
+			}
+			.node_g {
+				cursor : pointer;
+			}
+			.highlightlink {
+				stroke : red;
+			}
+			.clicklink {
+				stroke : purple
+			}
+			#mapid { }
+
+			#content .info {
+  height: 20px;
+}
+
+#content .map path {
+  fill: none;
+  stroke: #ff0000;
+}
+
+#content .bounding-box rect {
+  fill: none;
+  stroke: #333;
+  stroke-dasharray: 2,1;
+}
+
+#content .centroid {
+  display: none;
+}
+
+#content .centroid circle {
+  fill: red;
+ 
+		</style>
+	</head>
+	
+		
+
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<h1>Map prototype</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-12 hidden load-unhide" id="buttons-div">
+				
+				</div>
+			</div>
+			<div class="row align-content-center">
+				<div class="col-12 " id="loading" >
+					<image src="big-ajax-loader.gif"></image>
+					<p id="load-status">Loading data</p>
+				</div>
+				<div class="col-md-12 col-lg-12 col-sm-12 col-12 hidden load-unhide" id="vis">
+					 <div class="info">Hover over a country</div>
+					  <div id="content">
+<svg width="1000px" height="800px">
+      <g class="map"></g>
+      <g class="bounding-box"><rect></rect></g>
+      <g class="centroid"><circle r="4"></circle></g>
+    </svg>	
+					  
+					  </div>
+
+  
+				</div>
+			</div>
+		</div>
+
+	</body>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.5.4/crossfilter.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dc/4.2.7/dc.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
+	 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+   crossorigin=""></script>
+	<script src='map-proto-d3.js'></script>
+
+
+
+
+
+</html>
