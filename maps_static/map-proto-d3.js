@@ -36,9 +36,9 @@ async function wrapper(){
 	var baselong, baselat, zoom 
 	baselong = 45.6;
 	baselat =  -107.85;
-	zoom = 70;
+	zoom = 20000;
 
-	let projection = d3.geoMercator().scale(20000)
+	let projection = d3.geoMercator().scale(zoom)
 		//.translate([ 45.620038387065144,-107.8539177911578])
 		.center([baselat, baselong]);;
 
@@ -47,8 +47,8 @@ async function wrapper(){
 	let geoGenerator = d3.geoPath()
   		.projection(projection);
 
-
-  	let u = d3.select('#content g.map')
+  	let g = d3.select('#content g.map')
+  	let u = g
   	.selectAll('path')
   	.data(data3.features)
   	.join('path')
@@ -56,6 +56,14 @@ async function wrapper(){
 	//u.style("stroke-width", "1px").style("stroke", "red")
 
 
+	var zoom = d3.zoom()
+      .scaleExtent([1, 20000])
+      .on('zoom', function(event) {
+          g.selectAll('path')
+           .attr('transform', event.transform);
+	});
+
+	d3.select('#svg').call(zoom);
 
 	function windowResize(){
 	}

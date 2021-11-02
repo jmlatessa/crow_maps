@@ -1,1 +1,127 @@
-<a href="maps_static/map-proto.html">Prototype Map!</a>
+
+
+<html>
+	<head>
+		<title>Crow Family Survey Maps</title>
+		  <link rel="stylesheet" href="maps_static/js/leaflet.css"/>
+
+		<link rel="stylesheet" href="maps_static/js/bootstrap.css">
+		<style>
+			html, body {
+				height: 100%;
+			}
+			.hidden {
+				display: none;
+			}
+			.svg-container {
+			  display: inline-block;
+			  position: relative;
+			  width: 100%;
+			  padding-bottom: 100%; /* aspect ratio */
+			  vertical-align: top;
+			  overflow: hidden;
+			}
+			.svg-content-responsive {
+			  display: inline-block;
+			  position: absolute;
+			  top: 10px;
+			  left: 0;
+			}
+			
+			svg .rect {
+			  stroke: steelblue;
+			  stroke-width: 100px;
+			}
+
+			svg text {
+  				font: 8px sans-serif;
+  				font-weight: bold;
+  				pointer-events: none;
+  				stroke: white;
+  				stroke-width: .5;
+			}
+			#faculty-table {
+				overflow-y: auto;
+			}
+
+			td {
+				font-size: .8rem
+			}
+			.unselected {
+				background-color: #d3d3d3
+			}
+			.node_g {
+				cursor : pointer;
+			}
+			.highlightlink {
+				stroke : red;
+			}
+			.clicklink {
+				stroke : purple
+			}
+
+			#mapid { }
+
+			#content .info {
+  height: 20px;
+}
+
+#content .map path {
+  fill: none;
+  stroke: #ff0000;
+}
+
+#content .bounding-box rect {
+  fill: none;
+  stroke: #333;
+  stroke-dasharray: 2,1;
+}
+
+#content .centroid {
+  display: none;
+}
+
+#content .centroid circle {
+  fill: red;
+ 
+		</style>
+	</head>
+	
+		
+
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+
+				<div class="col-12">
+					<h1>Map prototype</h1>
+				</div>
+				<div class="col-12">
+				<a href="maps_static/map-proto.html">Prototype Map Leaflet!(Good!)</a>
+			</div>
+				<div class="col-12">
+					<a href="maps_static/map-proto-d3.html">Prototype Map D3! (BAD)</a>
+				</div>
+				<div class="col-12">
+					<a href="maps_static/map-proto-d3.html">Prototype Map Deck.gl! (Doesnt exist)</a>
+				</div>
+			</div>
+		
+			</div>
+
+	</body>
+
+	<script src="maps_static/js/jquery.min.js"></script>
+	<script src="maps_static/js/d3.min.js"></script>
+	<script src="maps_static/js/crossfilter.js"></script>
+	<script src="maps_static/js/dc.js"></script>
+	<script src="maps_static/js/bootstrap.min.js"></script>
+	 <script src="maps_static/js/leaflet.js"
+   ></script>
+	<script src='map-proto-d3.js'></script>
+
+
+
+
+
+</html>

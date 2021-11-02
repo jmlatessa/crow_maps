@@ -1,0 +1,104 @@
+1160AllTestResults.txt:
+   what is the difference between PROC_NAME, PROC_CODE, TEST_NAME and which of these is going to be best to use?
+
+
+	Contains our ORD_VALUE
+
+	drop NAN values, remove ORDER_STATUS--assume we only want completed results.
+	drop ORDER_RAW_VALUE
+	drop REFERENCE_UNIT
+
+
+
+1160AllBasicTestResults.txt:
+	Appears to have same columns as Alltestresults, but has fewer unique values across the board. Only completed orders?
+
+	Thinking of using this one and ignoring alltesresults.
+
+
+	Contains our ORD_VALUE
+
+	KEPT:
+
+	['PAT_ID', 'CURRENT_AGE', 'BIRTH_DATE', 
+
+        'GENDER', 'RACE', 'ETHNIC_GROUP',
+
+       'CONTACT_DATE', 'ORDERING_DATE',
+
+       'PROC_NAME', 'TEST_NAME', 'ORD_VALUE']
+
+1160Mapping.csv:
+	Used for linking across other files, master list for date references.
+	How we could think of the day features in test results--
+ 	Days after first date in mappings file within a few months.
+ 	Days since first visit?
+ 
+
+1160FlowsheetResult.txt:
+	Why are there only half the patient ID's in there? only inpatient?
+
+	What of this information would be worth preserving here?
+
+	How much of this information is redudant/repeated with encountervital.txt
+    
+
+1160EncounterVital.txt:
+	What is the weight in?
+
+	We can figure out the date of this by using the PAT_ENC_CSN_ID to link with mapping date. 
+	Can take use the vitals nearest to the urine culture order for data row creation
+
+	[BP_SYSTOLIC,	BP_DIASTOLIC,	TEMPERATURE	PULSE,	WEIGHT,	HEIGHT,	RESPIRATIONS,	BMI]
+
+
+1160Diagnosis.txt:
+	No idea what this one means, maybe include IS_UC_ORDER_DIAG?
+
+1160Medication.txt:
+	Definitely want to include this, csn ids are totally off with dates in mapping file. completely off.
+	What of this information is relevant? and should be preserved? Again with most recent 
+
+1160PatientList.txt:
+	[CURRENT_AGE	BIRTH_DATE	DEATH_DATE	GENDER	RACE	ETHNIC_GROUP]
+
+Thinking:
+
+We're interested in why these tests are ordered. In that case, are we can probably split just by ordered lab, rather than patients or encounters.
+
+We almost have information overload at this point. It's difficult to parse through it all.
+
+Do we do maximum or most recent vitals?
+
+
+Target classes for 0, 1 (ORD_VALUE): 
+0: Normal urogenital flora and also No Growth/No growth after 48 hours. no growth after 2 days.
+1: Everything else
+
+
+Deal with data:
+
+5 year dataset--narrow in terms of timeline.
+
+Gender identity excel sheet. 130 trans patients to evaluate.
+
+alltestresults vs basictestresults---need to figure out differences.
+
+can use each urine culture as a data row.
+
+eventually want to model inpatient, outpatient, emergency department. 
+
+flowsheets only for inpatients? maybe yes, we can just use encounter vitals.
+
+
+for encountervitals, include encountervitals that immediately precede culture order. Might want to look at peak values in previous 2 days. 
+
+diagnoses--ignore for now? probably icd10 codes and their uses. Think about it.
+
+medication antibiotic administration date before culture order? 
+
+were they treated with antibiotics after urine culture?
+were they on antibiotics before urine culture?
+
+Medications ---probably want to add thera_class.
+
