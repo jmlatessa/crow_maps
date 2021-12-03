@@ -61,6 +61,17 @@
     	background: #ddd;
     	outline: 0;
 	}
+
+	#control-panel {
+  font-family: Helvetica, Arial, sans-serif;
+  position: absolute;
+  background: #fff;
+  top: 3vh;
+  left: 90vw;
+  margin: 12px;
+  padding: 20px;
+  z-index: 10000;
+}
  
 		</style>
 	</head>
@@ -74,9 +85,28 @@
 					<h1>Map prototype</h1>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-12 hidden load-unhide" id="buttons-div">
-				
+
+
+			<div class="row hidden load-unhide mb-2">
+				<div class="col-lg-3 col-md-3 col-sm-12" id="">
+					<label for="color-option">Select color variable</label>
+					<select class="form-select" id="color-option">
+					</select>
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-12">
+					<label for="label1-option">Select 1st label variable</label>
+					<select class="form-select" id="label1-option">
+					</select>
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-12">
+					<label for="label2-option">Select 2nd label variable</label>
+					<select class="form-select" id="label2-option">
+					</select>
+				</div>
+				<div class="col-lg-3 col-md-3 col-sm-12">
+					<label for="label3-option">Select 3rd label variable</label>
+					<select class="form-select" id="label3-option">
+					</select>
 				</div>
 			</div>
 			<div class="row align-content-center">
@@ -85,8 +115,13 @@
 					<p id="load-status">Loading data</p>
 				</div>
 				<div class="col-md-12 col-lg-12 col-sm-12 col-12 hidden load-unhide" id="vis">
+
 					 <div id="mapid" style="height:500px; width:500px">
 					 </div>
+	<div id="control-panel">
+			<p>High color value: <span id="high-val"></span></p>
+			<p>Low color value: <span id="low-val"></span></p>
+		</div>
 				</div>
 			</div>
 		</div>
