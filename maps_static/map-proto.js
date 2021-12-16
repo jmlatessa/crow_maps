@@ -50,15 +50,29 @@ async function wrapper(){
 	}).addTo(mymap);
 	
 	
+function removeItemOnce(arr, value) {
+  var index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+  return arr;
+}
 
 //Setting up interaction
 let labels = Object.keys(data1.features[0].properties)
 
+let rmvals = ['FID', 'homestd_gr', 'FID_1', 'OBJECTID', 'file_num', 'survey_id', 'homestd_id', 'highlight', 'survey_gr', 'homestd__1', 'loc_note', 'loc_gr', 'res_1923', 'unique_id',  'Linked_Acc', 'hatch']
+
+rmvals.forEach(function(d){
+	labels = removeItemOnce(labels, d)
+})
+console.log(labels)
+
 let ids = ['#color-option', '#label1-option', '#label2-option', '#label3-option']
 
 
-var color1 = d3.interpolateBlues
-var color2 = d3.interpolateBlues
+var color1 = d3.interpolatePurples
+var color2 = d3.interpolatePurples
 
 
 var colorprop = "Acres"
@@ -66,8 +80,8 @@ var colorrange = d3.extent(data1.features, function(f){
 		return parseInt(f.properties[colorprop])
 	})
 var colorscale = d3.scaleLinear().domain(colorrange).range([0,1])
-var label1 = "First_Name"
-var label2 = "Last_Name"
+var label1 = "Name"
+var label2 = "Survey_URL"
 var label3 = "Remarks"
 ids.forEach(function(sel_id){
 
@@ -148,7 +162,7 @@ function stylegen(feature, the_layer){
 	}
 
 	let style1 = {
-		"fillOpacity" : .5,
+		"fillOpacity" : .8,
     	"fillColor": thecolorscale(colorscale(feature.properties[colorprop])),
     	"weight": 1,
     	"opacity": 1,
@@ -175,15 +189,47 @@ var resStyle = {
 		"fill" : false
 	}
 
+
+function checkLabelForURL(the_label, the_feature, update=false, layer=undefined){
+	var restr = ""
+	var label_val = ""
+
+	if(update == false){
+		label_val = the_feature.properties[the_label]
+	}
+	else{
+		label_val = layer._layers[the_feature].feature.properties[the_label]
+	}
+	console.log(label_val)
+	if(the_label == "Survey_URL" || the_label	== "Media_URL"){
+		if(label_val.length < 3){
+			restr = "No Url"
+		}
+		else{
+			restr = '<a target="_blank" href="' + label_val + '">Click Here</a>'
+		}
+	}
+	else{
+		restr = label_val;
+	}
+	return restr;
+}
+
 function onEachFeature(feature, layer) {
     if (feature.properties ) {
-        layer.bindPopup(label1 + ': ' + feature.properties[label1] + label2  + ': ' + feature.properties[label2] + ' ' + label3 + ': ' + feature.properties[label3]);
+        layer.bindPopup(label1 + ': ' + checkLabelForURL(label1, feature, update=false) + ' <br>' + label2  + ': ' + checkLabelForURL(label2, feature, update=false) + ' <br>' + label3 + ': ' + checkLabelForURL(label3, feature, update=false));
     }
 }
 
+function pubFeature(feature, layer){
+	 if (feature.properties ) {
+		layer.bindPopup(feature.properties["loc_note"])
+	 }
+};
+
 function updateLayerLabel(layer){
 	Object.keys(layer._layers).forEach(function(i){
-		layer._layers[i].setPopupContent( label1 + layer._layers[i].feature.properties[label1] + label2  + layer._layers[i].feature.properties[label2] + ' ' + label3 + ': ' + layer._layers[i].feature.properties[label3] );
+		layer._layers[i].setPopupContent( label1 + ': ' + checkLabelForURL(label1, i, update=true, layer=layer) + ' <br>' + label2  + ': ' + checkLabelForURL(label2, i, update=true, layer=layer) + ' <br>' + label3 + ': ' + checkLabelForURL(label3, i, update=true, layer=layer) );
 	})
 }
 
@@ -199,7 +245,6 @@ function updateLayerColors(layer){
 	d3.select("#low-val")
 		.style("background-color", color1(colorscale(colorrange[0])))
 		.text(colorrange[0])
-	console.log(colorscale(720))
 
 	homestdlayer.setStyle(homestyle)
 	surveylayer.setStyle(surveystyle)
@@ -220,19 +265,19 @@ function updateLayerColors(layer){
 	let publayer = L.geoJSON(data2.features,{
     style: {
 		"fillOpacity" : .5,
-    	"fillColor": '#000',
+    	"fillColor": '#fdc086',
     	"weight": 1,
     	"opacity": 1,
     	"stroke" : true,
     	"color" : 'black',
     	"weight" : .5,
 	},
-    onEachFeature: onEachFeature
+    onEachFeature: pubFeature
 	}).addTo(mymap)
 
 	let surveylayer = L.geoJSON(data1.features,{
-    style: surveystyle,
-    onEachFeature: onEachFeature
+    	style: surveystyle,
+    	onEachFeature: onEachFeature
 	}).addTo(mymap)
 	
 	
