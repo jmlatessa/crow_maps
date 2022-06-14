@@ -5,7 +5,7 @@ async function wrapper(){
 	let height = window.innerHeight;
 
 	//d3.select("#mapid").style("height", height)
-	let width = window.innerWidth;
+	let width = 100//window.innerWidth - 100;
   	let color_count = 0
 
 
@@ -354,7 +354,7 @@ function updateLayerColors(layer){
 	function windowResize(){
 		 height = window.innerHeight;
 	 	 width = window.innerWidth;
-		 svg_width = width
+		 svg_width = width - 30
 		 svg_height = height * .9
 		d3.select("#mapid").style("width", svg_width).style("height", svg_height)
 		mymap.invalidateSize()
