@@ -66,6 +66,38 @@ let rmvals = ['FID', 'homestd_gr', 'FID_1', 'OBJECTID', 'file_num', 'survey_id',
 rmvals.forEach(function(d){
 	labels = removeItemOnce(labels, d)
 })
+
+let addit_rmvals = ['Media_URL',
+	 'Alt_Name', 
+	 'Sex',
+	  'Photo_Desc', 
+	  'House_Cons', 
+	  'Survey_Dat', 
+	  'Alt_Survey', 
+	  'Survey_All', 
+	  'Degree', 
+	  'Status', 
+	  'HOH_Marita',
+	  'School_Des', 'School_typ', 'Acres', 'House_desc', 'House_Comm', 'Implement_', 'Water_Desc', 'Gen_Cond', 'Industry', 'House_Desc']
+
+
+let label_cleaned = {
+	'Name' : 'Name',
+	'Survey_URL' : 'Survey Link',
+ 	'Age' : 'Age',
+ 	'Reimb_Debt' : 'Debt',
+ 	'Family_Des': 'Family',
+ 	'Education_': 'Schooling',
+ 	'Health_Com' : 'Health',
+ 	'Location_D' : 'Location',
+ 	'Crop_Desc' : 'Farm', 
+ 	'Stock_Desc' : 'Ranch',
+ 	'Remarks' : 'Commentary'
+}
+
+addit_rmvals.forEach(function(d){
+	labels = removeItemOnce(labels, d)
+})
 console.log(labels)
 
 let ids = ['#color-option', '#label1-option', '#label2-option', '#label3-option']
@@ -75,7 +107,7 @@ var color1 = d3.interpolatePurples
 var color2 = d3.interpolatePurples
 
 
-var colorprop = "Acres"
+var colorprop = "Age"
 var colorrange = d3.extent(data1.features, function(f){
 		return parseInt(f.properties[colorprop])
 	})
@@ -96,7 +128,7 @@ ids.forEach(function(sel_id){
 			return d
 		})
 		.text(function(d){
-			return d
+			return label_cleaned[d]
 		})
 		.attr("selected", function(d){
 			if (sel_id == '#color-option'){
@@ -163,7 +195,7 @@ function stylegen(feature, the_layer){
 
 	let style1 = {
 		"fillOpacity" : .8,
-    	"fillColor": thecolorscale(colorscale(feature.properties[colorprop])),
+    	"fillColor": thecolorscale(colorscale(50)),//thecolorscale(colorscale(feature.properties[colorprop])),
     	"weight": 1,
     	"opacity": 1,
     	"stroke" : true,
@@ -200,7 +232,6 @@ function checkLabelForURL(the_label, the_feature, update=false, layer=undefined)
 	else{
 		label_val = layer._layers[the_feature].feature.properties[the_label]
 	}
-	console.log(label_val)
 	if(the_label == "Survey_URL" || the_label	== "Media_URL"){
 		if(label_val.length < 3){
 			restr = "No Url"
@@ -217,7 +248,7 @@ function checkLabelForURL(the_label, the_feature, update=false, layer=undefined)
 
 function onEachFeature(feature, layer) {
     if (feature.properties ) {
-        layer.bindPopup(label1 + ': ' + checkLabelForURL(label1, feature, update=false) + ' <br>' + label2  + ': ' + checkLabelForURL(label2, feature, update=false) + ' <br>' + label3 + ': ' + checkLabelForURL(label3, feature, update=false));
+        layer.bindPopup(label1 + ': ' + checkLabelForURL(label_cleaned[label1], feature, update=false) + ' <br>' + label_cleaned[label2]  + ': ' + checkLabelForURL(label2, feature, update=false) + ' <br>' + label_cleaned[label3] + ': ' + checkLabelForURL(label3, feature, update=false));
     }
 }
 
@@ -229,7 +260,7 @@ function pubFeature(feature, layer){
 
 function updateLayerLabel(layer){
 	Object.keys(layer._layers).forEach(function(i){
-		layer._layers[i].setPopupContent( label1 + ': ' + checkLabelForURL(label1, i, update=true, layer=layer) + ' <br>' + label2  + ': ' + checkLabelForURL(label2, i, update=true, layer=layer) + ' <br>' + label3 + ': ' + checkLabelForURL(label3, i, update=true, layer=layer) );
+		layer._layers[i].setPopupContent( label_cleaned[label1] + ': ' + checkLabelForURL(label1, i, update=true, layer=layer) + ' <br>' + label_cleaned[label2]  + ': ' + checkLabelForURL(label2, i, update=true, layer=layer) + ' <br>' + label_cleaned[label3] + ': ' + checkLabelForURL(label3, i, update=true, layer=layer) );
 	})
 }
 
@@ -279,6 +310,45 @@ function updateLayerColors(layer){
     	style: surveystyle,
     	onEachFeature: onEachFeature
 	}).addTo(mymap)
+
+	var searchLayer = new L.LayerGroup([surveylayer, homestdlayer]);
+
+	/*var searchControl = new L.Control.Search({	
+		layer: searchLayer,
+		propertyName: 'Name',
+		initial: false,
+		zoom: 12,
+		marker: false
+	});*/
+
+
+	searchControl = new L.Control.Search({
+          layer: searchLayer,
+					propertyName: 'Name',
+					propertyLoc: 'property.OBJECTID',
+					initial: false,
+					zoom: 12,
+					marker: false
+        });
+
+	searchControl.on('search:locationfound', function(e) {
+
+		e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
+		if(e.layer._popup)
+			e.layer.openPopup();
+
+	}).on('search:collapsed', function(e) {
+
+		surveylayer.eachLayer(function(layer) {	
+			surveylayer.resetStyle(layer);
+		});	
+		homestdlayer.eachLayer(function(layer) {
+			homestdlayer.resetStyle(layer);
+		});	
+	});
+
+	mymap.addControl( searchControl );
+
 	
 	
 	function windowResize(){

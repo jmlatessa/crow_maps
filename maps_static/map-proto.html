@@ -2,7 +2,7 @@
 	<head>
 		<title>Crow Family Survey Maps</title>
 		 <link rel="stylesheet" href="js/leaflet.css"/>
-
+		 <link rel="stylesheet" href="js/leaflet-search.css" />
 		<link rel="stylesheet" href="js/bootstrap.css">
 		<style>
 			html, body {
@@ -85,7 +85,7 @@
 
 
 			<div class="row hidden load-unhide mb-2">
-				<div class="col-lg-3 col-md-3 col-sm-12" id="">
+				<div class="col-lg-3 col-md-3 col-sm-12 hidden" id="">
 					<label for="color-option">Select color variable</label>
 					<select class="form-select" id="color-option">
 					</select>
@@ -115,7 +115,7 @@
 
 					 <div id="mapid" style="height:500px; width:500px">
 					 </div>
-	<div id="control-panel">
+	<div id="control-panel" class="hidden">
 			<p>High color value: <span id="high-val"></span></p>
 			<p>Low color value: <span id="low-val"></span></p>
 		</div>
@@ -130,8 +130,8 @@
 	<script src="js/crossfilter.js"></script>
 	<script src="js/dc.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	 <script src="js/leaflet.js"
-   ></script>
+	<script src="js/leaflet.js"></script>
+	<script src='js/leaflet-search.js'></script>
 	<script src='map-proto.js'></script>
 
 
