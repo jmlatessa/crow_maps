@@ -50,7 +50,7 @@ async function wrapper(){
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 100,
-    minZoom: 7,
+    minZoom: 8,
     id: 'mapbox/streets-v11',
     accessToken: mtoken
 	}).addTo(mymap);
