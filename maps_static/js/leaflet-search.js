@@ -126,7 +126,7 @@ L.Control.Search = L.Control.extend({
 		this._formatData = this.options.formatData || this._defaultFormatData;
 		this._moveToLocation = this.options.moveToLocation || this._defaultMoveToLocation;
 		this._autoTypeTmp = this.options.autoType;	//useful for disable autoType temporarily in delete/backspace keydown
-		this._countertips = 0;		//number of tips items
+		this._countertips = 5;		//number of tips items
 		this._recordsCache = {};	//key,value table! to store locations! format: key,latlng
 		this._curReq = null;
 	},
@@ -482,7 +482,6 @@ L.Control.Search = L.Control.extend({
 			propName = this.options.propertyName,
 			propLoc = this.options.propertyLoc,
 			jsonret = {};
-		console.log("RIGHT HERE!")
 		if( L.Util.isArray(propLoc) )
 			for (let i in json)
 				jsonret[ self._getPath(json[i],propName) ]= L.latLng( json[i][ propLoc[0] ], json[i][ propLoc[1] ] );
@@ -539,7 +538,6 @@ L.Control.Search = L.Control.extend({
 
   _searchInLayer: function(layer, retRecords, propName) {
     var self = this, loc;
-
     if(layer instanceof L.Control.Search.Marker) return;
 
     if(layer instanceof L.Marker || layer instanceof L.CircleMarker)
@@ -563,8 +561,10 @@ L.Control.Search = L.Control.extend({
     }
     else if(layer instanceof L.Path || layer instanceof L.Polyline || layer instanceof L.Polygon)
     {
+    	
       if(self._getPath(layer.options,propName))
-      {
+      {	
+      	console.warn('here')
         loc = layer.getBounds().getCenter();
         loc.layer = layer;
         retRecords[ self._getPath(layer.options,propName) ] = loc;
@@ -573,7 +573,13 @@ L.Control.Search = L.Control.extend({
       {
         loc = layer.getBounds().getCenter();
         loc.layer = layer;
-        retRecords[ self._getPath(layer.feature.properties,propName) ] = loc;
+        if (retRecords[self._getPath(layer.feature.properties,propName)] != undefined ){
+        	retRecords[self._getPath(layer.feature.properties,propName)].push(loc);
+        }
+        else{
+        	retRecords[self._getPath(layer.feature.properties,propName)] = [loc];
+        }
+        //retRecords[self._getPath(layer.feature.properties,propName)  ] = loc;
       }
       else {
         //throw new Error("propertyName '"+propName+"' not found in shape"); 
@@ -582,6 +588,7 @@ L.Control.Search = L.Control.extend({
     }
     else if(layer.hasOwnProperty('feature'))//GeoJSON
     {
+
       if(layer.feature.properties.hasOwnProperty(propName))
       {
         if(layer.getLatLng && typeof layer.getLatLng === 'function') {
@@ -592,6 +599,7 @@ L.Control.Search = L.Control.extend({
           loc = layer.getBounds().getCenter();
           loc.layer = layer;			
           retRecords[ layer.feature.properties[propName] ] = loc;
+
         } else {
           console.warn("Unknown type of Layer");
         }
@@ -756,9 +764,9 @@ L.Control.Search = L.Control.extend({
 		{
 			//TODO _recordsFromLayer must return array of objects, formatted from _formatData
 			this._recordsCache = this._recordsFromLayer();
-			
+			console.warn(this._recordsCache)
 			records = this._filterData( this._input.value, this._recordsCache );
-
+			console.warn(records)
 			this.showTooltip( records );
 
 			L.DomUtil.removeClass(this._container, 'search-load');
@@ -853,18 +861,21 @@ L.Control.Search = L.Control.extend({
 				this.collapse();
 			else
 			{
-				var loc = this._getLocation(this._input.value);
+				var locs = this._getLocation(this._input.value);
 				
-				if(loc===false)
+				if(locs===false)
 					this.showAlert();
 				else
 				{
+					for (let i in locs){
+					loc = locs[i]
 					this.showLocation(loc, this._input.value);
 					this.fire('search:locationfound', {
 							latlng: loc,
 							text: this._input.value,
 							layer: loc.layer ? loc.layer : null
 						});
+					}
 				}
 			}
 		}

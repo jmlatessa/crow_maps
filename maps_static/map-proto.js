@@ -21,12 +21,18 @@ async function wrapper(){
 	let data3 = await d3.json('arcmap_vector_geojson_layers_v02/crow_4325_survey_gr_map.json')
 	let reservation = await d3.json('arcmap_vector_geojson_layers_v02/crow_4326_res_1923.json')
 
+	console.log(reservation)
+	data1.features.forEach(function(d){
+		d.properties.name_id = d.properties.Name + "_" + d.id;
+	})
 
+	data3.features.forEach(function(d){
+		d.properties.name_id = d.properties.Name + "_" + d.id;
+	})
 
 	console.log(data1)
 	console.log(data2)
 	console.log(data3)
-	console.log(reservation)
 
 	//Setting up initial map
 	var baselong, baselat, zoom
@@ -325,19 +331,19 @@ function updateLayerColors(layer){
 	searchControl = new L.Control.Search({
           layer: searchLayer,
 					propertyName: 'Name',
-					propertyLoc: 'property.OBJECTID',
 					initial: false,
 					zoom: 12,
-					marker: false
+					marker: false,
+					tooltipLimit: 20,
         });
 
 	searchControl.on('search:locationfound', function(e) {
-
-		e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
+		console.log("here?")
+		e.layer.setStyle({fillColor: '#990', color: '#0b0', });
 		if(e.layer._popup)
 			e.layer.openPopup();
 
-	}).on('search:collapsed', function(e) {
+	}).on('search:expanded', function(e) {
 
 		surveylayer.eachLayer(function(layer) {	
 			surveylayer.resetStyle(layer);
@@ -346,6 +352,7 @@ function updateLayerColors(layer){
 			homestdlayer.resetStyle(layer);
 		});	
 	});
+
 
 	mymap.addControl( searchControl );
 
